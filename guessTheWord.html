@@ -25,6 +25,9 @@
         "зеркало",
         "айтишник",
         "кондиционер",
+        "мышька",
+        "капуста",
+        "телевизор",
       ];
       // Выбираем случайное слово
       let word = words[Math.floor(Math.random() * words.length)];
@@ -34,14 +37,19 @@
         answerArray[i] = "_";
       }
       let remainingLetters = word.length;
+      let attempts = word.length + 4;
       // Игровой цикл
-      while (remainingLetters > 0) {
+      while (remainingLetters > 0 && attempts > 0) {
         // Показываем состояние игры
         alert(answerArray.join(" "));
         // Запрашиваем вариант ответа
         let guess = prompt(
-          "Угадайте букву или нажмите Отмена для выхода из игры."
+          "Угадайте букву или нажмите Отмена для выхода из игры. У Вас " +
+            attempts +
+            " попыток."
         );
+        guess = guess.toLowerCase();
+        attempts--;
         if (guess === null) {
           break;
         } else if (guess.length !== 1) {
@@ -49,15 +57,25 @@
         } else {
           // Обновляем состояние игры
           for (let j = 0; j < word.length; j++) {
-            if (word[j] === guess) {
+            if (word[j] === guess && answerArray[j] == "_") {
               answerArray[j] = guess;
               remainingLetters--;
+            } else if (answerArray[j] !== "_" && word[j] === guess) {
+              alert("Эта буква уже угадана! Попробуйте другую.");
             }
           }
         }
       }
-      alert(answerArray.join(" "));
-      alert("Отлично! Было загадано слово " + word);
+      if (answerArray.includes("_") && attempts === 0) {
+        alert(
+          "К сожалению, Вы истратили все попытки. Было загадано слово " +
+            word +
+            ". Попробуйте еще раз!"
+        );
+      } else {
+        alert(answerArray.join(" "));
+        alert("Отлично! Было загадано слово " + word);
+      }
     </script>
   </body>
 </html>
